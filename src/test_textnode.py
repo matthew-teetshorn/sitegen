@@ -1,9 +1,17 @@
 import unittest
+import os
 
 from textnode import TextNode, TextType
 
 
 class TestTextNode(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        """
+        Custom setUpClass method to print the current file name.
+        """
+        print(f"\nRunning tests from: {os.path.basename(__file__)}")
+
     def test_eq(self):
         node = TextNode("This is a text node", TextType.BOLD)
         node2 = TextNode("This is a text node", TextType.BOLD)
