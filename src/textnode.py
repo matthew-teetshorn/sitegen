@@ -18,6 +18,8 @@ class TextNode:
 
     def __eq__(self, other):
         equal = True
+        if type(self) is not type(other):
+            return False
         for attrname, attrvalue in vars(self).items():
             if getattr(self, attrname) != getattr(other, attrname):
                 equal = False
