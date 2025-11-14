@@ -6,7 +6,6 @@ class LeafNode(HTMLNode):
         self,
         tag: str | None,
         value: str | None = None,
-        children: list["HTMLNode"] | None = None,
         props: dict[str, str] | None = None,
     ):
         # LeafNode is not allowed to have children
