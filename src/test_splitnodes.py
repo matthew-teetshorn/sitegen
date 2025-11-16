@@ -3,7 +3,7 @@ import unittest
 import os
 
 from htmlnode import HTMLNode
-from textnode import TextNode, TextType, text_node_to_html_node
+from textnode import TextNode, TextType
 from splitnodes import split_nodes_delimiter
 
 
