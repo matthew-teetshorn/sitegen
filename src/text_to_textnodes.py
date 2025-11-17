@@ -1,6 +1,5 @@
 from typing import List
 from enum import Enum
-from htmlnode import HTMLNode
 from textnode import TextNode, TextType
 from splitnodes import split_nodes_delimiter
 from extractlinks import split_nodes_image, split_nodes_link
@@ -12,8 +11,8 @@ class DelimiterType(Enum):
     CODE = {"delimiter": "`", "text_type": TextType.CODE}
 
 
-def text_to_textnodes(text: str) -> list[TextNode | HTMLNode]:
-    return_list: List[TextNode | HTMLNode] = []
+def text_to_textnodes(text: str) -> list[TextNode]:
+    return_list: List[TextNode] = []
     return_list.append(TextNode(text, TextType.TEXT))
 
     for delimiter in DelimiterType:
