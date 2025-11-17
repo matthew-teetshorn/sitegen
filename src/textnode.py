@@ -12,9 +12,9 @@ class TextType(Enum):
 
 
 class TextNode:
-    def __init__(self, text: str, text_type: TextType, url: str | None = None):
+    def __init__(self, text: str, type: TextType, url: str | None = None):
         self.text = text
-        self.type = text_type
+        self.type = type
         self.url = url
 
     def __eq__(self, other):
