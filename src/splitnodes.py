@@ -1,16 +1,11 @@
 from textnode import TextType, TextNode
-from htmlnode import HTMLNode
 
 
 def split_nodes_delimiter(
-    old_nodes: list[TextNode | HTMLNode], delimiter: str, text_type: TextType
+    old_nodes: list[TextNode], delimiter: str, text_type: TextType
 ):
     new_nodes = []
     for current_node in old_nodes:
-        # Pass on nodes of other types
-        if not isinstance(current_node, TextNode):
-            new_nodes.append(current_node)
-            continue
         # Pass on TextNodes of incorrect TextType
         if current_node.type != TextType.TEXT:
             new_nodes.append(current_node)
