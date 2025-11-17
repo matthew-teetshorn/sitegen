@@ -5,13 +5,6 @@ from textnode import TextNode, TextType
 from splitnodes import split_nodes_delimiter
 from extractlinks import split_nodes_image, split_nodes_link
 
-# TEXT = "text"
-# BOLD = "bold"
-# ITALIC = "italic"
-# CODE = "code"
-# LINK = "link"
-# IMAGE = "image"
-
 
 class DelimiterType(Enum):
     BOLD = {"delimiter": "**", "text_type": TextType.BOLD}
