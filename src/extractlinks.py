@@ -1,6 +1,5 @@
 import re
 from textnode import TextType, TextNode
-from htmlnode import HTMLNode
 
 # Find text items of the form '[link text](linkURL)'
 # Screens for invalid characters in URL
@@ -24,14 +23,10 @@ def extract_markdown_links(text: str) -> list[tuple[str, str]]:
 
 
 def split_nodes_image(
-    old_nodes: list[TextNode | HTMLNode],
-) -> list[TextNode | HTMLNode]:
+    old_nodes: list[TextNode],
+) -> list[TextNode]:
     new_nodes = []
     for current_node in old_nodes:
-        # Pass on nodes of other types
-        if not isinstance(current_node, TextNode):
-            new_nodes.append(current_node)
-            continue
         # Pass on TextNodes of incorrect TextType
         if current_node.type != TextType.TEXT:
             new_nodes.append(current_node)
@@ -73,14 +68,10 @@ def split_nodes_image(
 
 
 def split_nodes_link(
-    old_nodes: list[TextNode | HTMLNode],
-) -> list[TextNode | HTMLNode]:
+    old_nodes: list[TextNode],
+) -> list[TextNode]:
     new_nodes = []
     for current_node in old_nodes:
-        # Pass on nodes of other types
-        if not isinstance(current_node, TextNode):
-            new_nodes.append(current_node)
-            continue
         # Pass on TextNodes of incorrect TextType
         if current_node.type != TextType.TEXT:
             new_nodes.append(current_node)
