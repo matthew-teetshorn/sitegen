@@ -17,4 +17,7 @@ class LeafNode(HTMLNode):
         if self.tag is None:
             return f"{self.value}"
 
+        # void tags do not get a closing tag and end with a /> for xhtml compliance
+        if self.tag == "img":
+            return f"<{self.tag}{self.props_to_html()}/>"
         return f"<{self.tag}{self.props_to_html()}>{self.value}</{self.tag}>"

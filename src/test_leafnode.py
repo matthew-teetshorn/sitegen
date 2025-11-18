@@ -45,6 +45,14 @@ class TestLeafNode(unittest.TestCase):
         node1 = LeafNode("a", "Click Here", {"href": "https://link.dev"})
         self.assertEqual(node1.to_html(), '<a href="https://link.dev">Click Here</a>')
 
+    def test_leaf_to_html_img(self):
+        node1 = LeafNode(
+            "img", "", {"src": "https://picsum.photos/200/300", "alt": "alt text"}
+        )
+        self.assertEqual(
+            node1.to_html(), '<img src="https://picsum.photos/200/300" alt="alt text"/>'
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
