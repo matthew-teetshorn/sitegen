@@ -90,8 +90,6 @@ def split_nodes_image(
                 url = item[1]
                 new_nodes.append(TextNode(alt_text, TextType.IMAGE, url))
 
-        print(":::::::::::::::::::::::NEW IMAGE NODES::::::::::::::::::::::::::::")
-        print(new_nodes)
     return new_nodes
 
 
