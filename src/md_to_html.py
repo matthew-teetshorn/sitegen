@@ -85,7 +85,11 @@ def create_heading(text: str) -> HTMLNode:
 
 def create_code(text: str) -> HTMLNode:
     nodes: List[HTMLNode] = []
-    p_node = ParentNode(None, None, None)
+    new_text = regex.sub(re_defs.REGEX_CODE_BLOCK, r"\1", text, regex.DOTALL)
+    new_text = new_text.strip("\n")
+    # We don't process the code block as markdown, just append it as a LeafNode
+    nodes.append(LeafNode(None, new_text, None))
+    p_node = ParentNode("code", nodes, None)
 
     return p_node
 

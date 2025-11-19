@@ -93,6 +93,16 @@ class TestMarkdownToHTML(unittest.TestCase):
         expected = "<div><h3>Here is some <b>bold</b> <i>italic</i> and <code>code</code> text in a heading</h3></div>"
         self.assertEqual(result, expected)
 
+    def test_c1(self):
+        text = """```
+for (int i = 0; i < 10; i++) {
+    doSomething();
+}```"""
+        node = markdown_to_html(text)
+        result = node.to_html()
+        expected = "<div><code>for (int i = 0; i < 10; i++) {\n    doSomething();\n}</code></div>"
+        self.assertEqual(result, expected)
+
 
 if __name__ == "__main__":
     unittest.main()
