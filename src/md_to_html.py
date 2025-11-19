@@ -5,6 +5,8 @@ from leafnode import LeafNode
 from mdtoblocks import block_to_blocktype, markdown_to_blocks, BlockType
 from textnode import TextNode, TextType
 from text_to_textnodes import text_to_textnodes
+import regex
+import re_defs
 
 # Parent Node Types:
 # div/p/h1-h6/ul/ol/li/blockquote/pre
@@ -62,34 +64,51 @@ def create_paragraph(text: str) -> HTMLNode:
     return p_node
 
 
-def create_heading(text: str) -> list[HTMLNode]:
+def create_heading(text: str) -> HTMLNode:
+    new_text = regex.sub(
+        re_defs.REGEX_HEADING,
+        "",
+        text,
+    )
+
+    if len(new_text) == len(text):
+        raise ValueError("No markdown heading found in create_heading(text)")
+
+    # Get difference and subtract white space character
+    heading_length = len(text) - len(new_text) - 1
     nodes: List[HTMLNode] = []
+    nodes.extend(text_to_htmlnodes(new_text))
+    p_node = ParentNode(f"h{heading_length}", nodes, None)
 
-    return nodes
+    return p_node
 
 
-def create_code(text: str) -> list[HTMLNode]:
+def create_code(text: str) -> HTMLNode:
     nodes: List[HTMLNode] = []
+    p_node = ParentNode(None, None, None)
 
-    return nodes
+    return p_node
 
 
-def create_quote(text: str) -> list[HTMLNode]:
+def create_quote(text: str) -> HTMLNode:
     nodes: List[HTMLNode] = []
+    p_node = ParentNode(None, None, None)
 
-    return nodes
+    return p_node
 
 
-def create_unordered_list(text: str) -> list[HTMLNode]:
+def create_unordered_list(text: str) -> HTMLNode:
     nodes: List[HTMLNode] = []
+    p_node = ParentNode(None, None, None)
 
-    return nodes
+    return p_node
 
 
-def create_ordered_list(text: str) -> list[HTMLNode]:
+def create_ordered_list(text: str) -> HTMLNode:
     nodes: List[HTMLNode] = []
+    p_node = ParentNode(None, None, None)
 
-    return nodes
+    return p_node
 
 
 def markdown_to_html(markdown: str) -> ParentNode:
@@ -106,14 +125,14 @@ def markdown_to_html(markdown: str) -> ParentNode:
             case BlockType.PARAGRAPH:
                 doc_parent.children.append(create_paragraph(block))
             case BlockType.HEADING:
-                doc_parent.children.extend(create_heading(block))
+                doc_parent.children.append(create_heading(block))
             case BlockType.CODE:
-                doc_parent.children.extend(create_code(block))
+                doc_parent.children.append(create_code(block))
             case BlockType.QUOTE:
-                doc_parent.children.extend(create_quote(block))
+                doc_parent.children.append(create_quote(block))
             case BlockType.UNORDERED_LIST:
-                doc_parent.children.extend(create_unordered_list(block))
+                doc_parent.children.append(create_unordered_list(block))
             case BlockType.ORDERED_LIST:
-                doc_parent.children.extend(create_ordered_list(block))
+                doc_parent.children.append(create_ordered_list(block))
 
     return doc_parent

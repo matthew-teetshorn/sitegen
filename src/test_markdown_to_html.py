@@ -1,7 +1,7 @@
 import unittest
 import os
 
-from md_to_html import markdown_to_html
+from md_to_html import create_heading, markdown_to_html
 
 
 class TestMarkdownToHTML(unittest.TestCase):
@@ -59,6 +59,38 @@ class TestMarkdownToHTML(unittest.TestCase):
         node = markdown_to_html(text)
         result = node.to_html()
         expected = '<div><p>text in front <a href="url1">link1</a><a href="url2">link2</a> text in back</p></div>'
+        self.assertEqual(result, expected)
+
+    def test_h1(self):
+        text = "# Here is a heading"
+        node = markdown_to_html(text)
+        result = node.to_html()
+        expected = "<div><h1>Here is a heading</h1></div>"
+        self.assertEqual(result, expected)
+
+    def test_h2(self):
+        text = "###### Here is a heading"
+        node = markdown_to_html(text)
+        result = node.to_html()
+        expected = "<div><h6>Here is a heading</h6></div>"
+        self.assertEqual(result, expected)
+
+    def test_h3(self):
+        text = "####### Here is a paragraph with a bad heading"
+        node = markdown_to_html(text)
+        result = node.to_html()
+        expected = "<div><p>####### Here is a paragraph with a bad heading</p></div>"
+        self.assertEqual(result, expected)
+
+    def test_h4(self):
+        text = "####### Here is a paragraph with a bad heading"
+        self.assertRaises(ValueError, create_heading, text)
+
+    def test_h5(self):
+        text = "### Here is some **bold** _italic_ and `code` text in a heading"
+        node = markdown_to_html(text)
+        result = node.to_html()
+        expected = "<div><h3>Here is some <b>bold</b> <i>italic</i> and <code>code</code> text in a heading</h3></div>"
         self.assertEqual(result, expected)
 
 
