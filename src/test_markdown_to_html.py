@@ -1,7 +1,14 @@
 import unittest
 import os
 
-from md_to_html import create_heading, markdown_to_html
+from md_to_html import (
+    markdown_to_html,
+    create_heading,
+    create_code,
+    create_quote,
+    create_ordered_list,
+    create_unordered_list,
+)
 
 
 class TestMarkdownToHTML(unittest.TestCase):
@@ -102,6 +109,10 @@ for (int i = 0; i < 10; i++) {
         result = node.to_html()
         expected = "<div><code>for (int i = 0; i < 10; i++) {\n    doSomething();\n}</code></div>"
         self.assertEqual(result, expected)
+
+    def test_c2(self):
+        text = "`` this isn't properly formatted ``"
+        self.assertRaises(ValueError, create_code, text)
 
 
 if __name__ == "__main__":

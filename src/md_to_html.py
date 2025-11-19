@@ -86,6 +86,10 @@ def create_heading(text: str) -> HTMLNode:
 def create_code(text: str) -> HTMLNode:
     nodes: List[HTMLNode] = []
     new_text = regex.sub(re_defs.REGEX_CODE_BLOCK, r"\1", text, regex.DOTALL)
+
+    if len(new_text) == len(text):
+        raise ValueError("No markdown code block found in create_code(text)")
+
     new_text = new_text.strip("\n")
     # We don't process the code block as markdown, just append it as a LeafNode
     nodes.append(LeafNode(None, new_text, None))
