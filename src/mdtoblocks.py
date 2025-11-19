@@ -1,5 +1,7 @@
 from enum import Enum
-import re
+import regex
+
+import re_defs
 
 
 class BlockType(Enum):
@@ -23,60 +25,44 @@ def markdown_to_blocks(string: str) -> list[str]:
 
 
 def block_is_heading(block: str) -> bool:
-    # Supported heading style 1-6 '#' with <space> after
-    REGEX_H = r"^\#{1,6}\s"
-
     # Currently only support headings on single lines with newlines surrounding
-    if "\n" in block or re.findall(REGEX_H, block) == []:
+    if "\n" in block or regex.findall(re_defs.REGEX_HEADING, block) == []:
         return False
 
     return True
 
 
 def block_is_code(block: str) -> bool:
-    # Supported code block style ``` stuff ```
-    REGEX_C = r"^`{3}.*`{3}$"
-
     # Code blocks can contain newline sequences
-    if re.findall(REGEX_C, block, flags=re.DOTALL) == []:
+    if regex.findall(re_defs.REGEX_CODE_BLOCK, block, flags=regex.DOTALL) == []:
         return False
 
     return True
 
 
 def block_is_quote(block: str) -> bool:
-    # Supported quote symbol: > with <space> after
-    REGEX_Q = r"^\> "
-
     substrings = block.split("\n")
     for substring in substrings:
-        if re.search(REGEX_Q, substring) is None:
+        if regex.search(re_defs.REGEX_BLOCK_QUOTE, substring) is None:
             return False
 
     return True
 
 
 def block_is_ul(block: str) -> bool:
-    # Supported unordered list symbol: '-' with <space> after
-    REGEX_UL = r"^\- "
-
     substrings = block.split("\n")
     for substring in substrings:
-        if re.search(REGEX_UL, substring) is None:
+        if regex.search(re_defs.REGEX_UL_ITEM, substring) is None:
             return False
 
     return True
 
 
 def block_is_ol(block: str) -> bool:
-    # Supported ordered list symbol: 'N' with <space> after
-    # N must start at '1' and increment by 1 on each substring
-    REGEX_OL = r"^(\d+)\. "
-
     substrings = block.split("\n")
     start_num = 1
     for substring in substrings:
-        regex_result = re.findall(REGEX_OL, substring)
+        regex_result = regex.findall(re_defs.REGEX_OL_ITEM, substring)
         if regex_result == [] or int(regex_result[0]) != start_num:
             return False
         start_num += 1

@@ -1,14 +1,7 @@
 import regex
 from textnode import TextType, TextNode
 import itertools
-
-# Find text items of the form '[link text](linkURL)'
-# Screens for invalid characters in URL
-REGEX_MD_LINK_FRONT = r"(?<!!)\[([^\[\]]+)\]\("
-REGEX_MD_LINK_URL = r"\(((?:[^()]|(?R))*)\)"
-# REGEX_MARKDOWN_LINK = r'(?<!!)\[([^\[\]]+)\]\(([^"()\s{}<>|\\`[\]]+)\)'
-# Find text items of the form '![alt text](linkToImage)'
-REGEX_MARKDOWN_IMG = r'!\[([^[\]]+)\]\(([^"()\s{}<>|\\`[\]]+)\)'
+import re_defs
 
 # Tag representing regex matches which have been removed from a substrings
 # used for splitting substrings
@@ -16,7 +9,7 @@ REMOVED_MD = "<R>"
 
 
 def extract_markdown_images(text: str) -> list[tuple[str, str]] | None:
-    matches = regex.findall(REGEX_MARKDOWN_IMG, text)
+    matches = regex.findall(re_defs.REGEX_MARKDOWN_IMG, text)
     return matches
 
 
@@ -28,8 +21,8 @@ def extract_markdown_images(text: str) -> list[tuple[str, str]] | None:
 # Function returns a tuple with the matched text, url, start_idx, end_idx of the matched regex
 def extract_markdown_links(text: str) -> list[tuple[str, str, int, int]] | None:
     matches = []
-    re_link_text = regex.compile(REGEX_MD_LINK_FRONT)
-    re_link_url = regex.compile(REGEX_MD_LINK_URL)
+    re_link_text = regex.compile(re_defs.REGEX_LINK_FRONT)
+    re_link_url = regex.compile(re_defs.REGEX_LINK_URL)
     link_text = None
     link_url = None
     start = 0
@@ -79,7 +72,7 @@ def split_nodes_image(
 
         # Passing on count from regex.subn as we have already verified images exist
         no_images_string, _ = regex.subn(
-            REGEX_MARKDOWN_IMG, REMOVED_MD, current_node.text
+            re_defs.REGEX_MARKDOWN_IMG, REMOVED_MD, current_node.text
         )
         substrings = no_images_string.split(REMOVED_MD)
 
