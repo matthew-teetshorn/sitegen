@@ -1,9 +1,12 @@
-import re
+import regex
 from textnode import TextType, TextNode
+import itertools
 
 # Find text items of the form '[link text](linkURL)'
 # Screens for invalid characters in URL
-REGEX_MARKDOWN_LINK = r'(?<!!)\[([^\[\]]+)\]\(([^"()\s{}<>|\\`[\]]+)\)'
+REGEX_MD_LINK_FRONT = r"(?<!!)\[([^\[\]]+)\]\("
+REGEX_MD_LINK_URL = r"\(((?:[^()]|(?R))*)\)"
+# REGEX_MARKDOWN_LINK = r'(?<!!)\[([^\[\]]+)\]\(([^"()\s{}<>|\\`[\]]+)\)'
 # Find text items of the form '![alt text](linkToImage)'
 REGEX_MARKDOWN_IMG = r'!\[([^[\]]+)\]\(([^"()\s{}<>|\\`[\]]+)\)'
 
@@ -12,13 +15,48 @@ REGEX_MARKDOWN_IMG = r'!\[([^[\]]+)\]\(([^"()\s{}<>|\\`[\]]+)\)'
 REMOVED_MD = "<R>"
 
 
-def extract_markdown_images(text: str) -> list[tuple[str, str]]:
-    matches = re.findall(REGEX_MARKDOWN_IMG, text)
+def extract_markdown_images(text: str) -> list[tuple[str, str]] | None:
+    matches = regex.findall(REGEX_MARKDOWN_IMG, text)
     return matches
 
 
-def extract_markdown_links(text: str) -> list[tuple[str, str]]:
-    matches = re.findall(REGEX_MARKDOWN_LINK, text)
+# Extracting links is more complicated than regex.findall()
+# Links can contain matched pairs of parentheses which requires a recursive regex
+# The recursive regex does not work with the static lead in '[link]' construction
+# Therefore, they are broken down into two regex's that are scanned sequentially
+#
+# Function returns a tuple with the matched text, url, start_idx, end_idx of the matched regex
+def extract_markdown_links(text: str) -> list[tuple[str, str, int, int]] | None:
+    matches = []
+    re_link_text = regex.compile(REGEX_MD_LINK_FRONT)
+    re_link_url = regex.compile(REGEX_MD_LINK_URL)
+    link_text = None
+    link_url = None
+    start = 0
+    end = len(text)
+
+    while start < end:
+        match = re_link_text.search(text, start, end)
+        if match is None:
+            break
+        else:
+            link_text = match.group(1)
+            s_idx, e_idx = match.span()
+            # REGEX_MD_LINK_FRONT captures the following '(': go back one
+            start = e_idx - 1
+            match = re_link_url.search(text, start, end)
+
+            if match is None:
+                break
+            _, e_idx = match.span()
+
+            # if [link](url) are not directly next to one another continue
+            link_url = match.group(1)
+            matches.append((link_text, link_url, s_idx, e_idx))
+
+            start = e_idx
+
+    # matches = regex.findall(REGEX_MARKDOWN_LINK, text)
     return matches
 
 
@@ -33,37 +71,34 @@ def split_nodes_image(
             continue
 
         current_img_nodes = extract_markdown_images(current_node.text)
-        img_idx = 0
 
         # Pass on node with no img markdown tags
         if not current_img_nodes:
             new_nodes.append(current_node)
             continue
 
-        # Passing on count from re.subn as we have already verified images exist
-        no_images_string, _ = re.subn(REGEX_MARKDOWN_IMG, REMOVED_MD, current_node.text)
+        # Passing on count from regex.subn as we have already verified images exist
+        no_images_string, _ = regex.subn(
+            REGEX_MARKDOWN_IMG, REMOVED_MD, current_node.text
+        )
         substrings = no_images_string.split(REMOVED_MD)
-        inserted_text = False  # Did we just insert a standard text node?
 
-        for current_substring in substrings:
-            if current_substring == "":  # Next insert should be image
-                inserted_text = True
-                continue
-            if inserted_text:
-                alt_text = current_img_nodes[img_idx][0]
-                url = current_img_nodes[img_idx][1]
+        zipped = list(
+            itertools.chain.from_iterable(
+                itertools.zip_longest(substrings, current_img_nodes, fillvalue="")
+            )
+        )
+        for item in zipped:
+            if type(item) is str:
+                if item != "":
+                    new_nodes.append(TextNode(item, TextType.TEXT))
+            elif type(item) is tuple:
+                alt_text = item[0]
+                url = item[1]
                 new_nodes.append(TextNode(alt_text, TextType.IMAGE, url))
-                img_idx += 1
 
-            new_nodes.append(TextNode(current_substring, TextType.TEXT))
-            inserted_text = True
-
-        # Could have an extra image node left over
-        if img_idx < len(current_img_nodes):
-            alt_text = current_img_nodes[img_idx][0]
-            url = current_img_nodes[img_idx][1]
-            new_nodes.append(TextNode(alt_text, TextType.IMAGE, url))
-
+        print(":::::::::::::::::::::::NEW IMAGE NODES::::::::::::::::::::::::::::")
+        print(new_nodes)
     return new_nodes
 
 
@@ -78,35 +113,30 @@ def split_nodes_link(
             continue
 
         current_link_nodes = extract_markdown_links(current_node.text)
-        img_idx = 0
 
         # Pass on node with no img markdown tags
         if not current_link_nodes:
             new_nodes.append(current_node)
             continue
 
-        # Passing on count from re.subn as we have already verified images exist
-        no_links_string, _ = re.subn(REGEX_MARKDOWN_LINK, REMOVED_MD, current_node.text)
-        substrings = no_links_string.split(REMOVED_MD)
-        inserted_text = False  # Did we just insert a standard text node?
-
-        for current_substring in substrings:
-            if current_substring == "":  # Next insert should be image
-                inserted_text = True
-                continue
-            if inserted_text:
-                anchor_text = current_link_nodes[img_idx][0]
-                url = current_link_nodes[img_idx][1]
+        # Passing on count from regex.subn as we have already verified images exist
+        substrings = []
+        i = 0
+        for link in current_link_nodes:
+            substrings.append(current_node.text[i : link[2]])
+            i = link[3]
+        substrings.append(current_node.text[i : len(current_node.text)])
+        zipped = list(
+            itertools.chain.from_iterable(
+                itertools.zip_longest(substrings, current_link_nodes, fillvalue="")
+            )
+        )
+        for item in zipped:
+            if type(item) is str:
+                if item != "":
+                    new_nodes.append(TextNode(item, TextType.TEXT))
+            elif type(item) is tuple:
+                anchor_text = item[0]
+                url = item[1]
                 new_nodes.append(TextNode(anchor_text, TextType.LINK, url))
-                img_idx += 1
-
-            new_nodes.append(TextNode(current_substring, TextType.TEXT))
-            inserted_text = True
-
-        # Could have an extra link node left over
-        if img_idx < len(current_link_nodes):
-            alt_text = current_link_nodes[img_idx][0]
-            url = current_link_nodes[img_idx][1]
-            new_nodes.append(TextNode(alt_text, TextType.LINK, url))
-
     return new_nodes

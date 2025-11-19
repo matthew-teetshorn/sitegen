@@ -5,7 +5,7 @@ from textnode import TextNode, TextType
 from text_to_textnodes import text_to_textnodes
 
 
-class TestSplitImgsLinks(unittest.TestCase):
+class TestTextToTextNodes(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         """
@@ -42,8 +42,6 @@ class TestSplitImgsLinks(unittest.TestCase):
             TextNode("There is no markdown in here", TextType.TEXT),
         ]
         result = text_to_textnodes(string)
-        # print("\n::::::::::::::::RESULT INCOMING:::::::::::::::")
-        # print(result)
         self.assertEqual(result, expected)
 
     def test_link2(self):
