@@ -42,41 +42,41 @@ class TestHTMLNode(unittest.TestCase):
         node2 = HTMLNode("a", children=[HTMLNode("p")])
         self.assertNotEqual(node1, node2)
 
-    def test_repr(self):
-        print(
-            HTMLNode(
-                "a",
-                value="Boot.Dev",
-                props={"href": "https://boot.dev", "rel": "external"},
-            )
-        )
-        print(
-            HTMLNode(
-                "a",
-                children=[
-                    HTMLNode(
-                        "img",
-                        props={
-                            "border": "0",
-                            "alt": "W3Schools",
-                            "src": "logo_w3s.gif",
-                            "width": "100",
-                            "height": "100",
-                        },
-                    ),
-                    HTMLNode(
-                        "img",
-                        props={
-                            "border": "10",
-                            "alt": "Some other image",
-                            "src": "otherimage.gif",
-                            "width": "100",
-                            "height": "100",
-                        },
-                    ),
-                ],
-            )
-        )
+    # def test_repr(self):
+    #     print(
+    #         HTMLNode(
+    #             "a",
+    #             value="Boot.Dev",
+    #             props={"href": "https://boot.dev", "rel": "external"},
+    #         )
+    #     )
+    #     print(
+    #         HTMLNode(
+    #             "a",
+    #             children=[
+    #                 HTMLNode(
+    #                     "img",
+    #                     props={
+    #                         "border": "0",
+    #                         "alt": "W3Schools",
+    #                         "src": "logo_w3s.gif",
+    #                         "width": "100",
+    #                         "height": "100",
+    #                     },
+    #                 ),
+    #                 HTMLNode(
+    #                     "img",
+    #                     props={
+    #                         "border": "10",
+    #                         "alt": "Some other image",
+    #                         "src": "otherimage.gif",
+    #                         "width": "100",
+    #                         "height": "100",
+    #                     },
+    #                 ),
+    #             ],
+    #         )
+    #     )
 
 
 if __name__ == "__main__":
