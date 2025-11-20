@@ -91,9 +91,11 @@ def create_code(text: str) -> HTMLNode:
         raise ValueError("No markdown code block found in create_code(text)")
 
     new_text = new_text.strip("\n")
+    # HTML doesn't render newlines, replace with HTML newline code
+    new_text = new_text.replace("\n", "&#10;")
     # We don't process the code block as markdown, just append it as a LeafNode
     nodes.append(LeafNode(None, new_text, None))
-    p_node = ParentNode("code", nodes, None)
+    p_node = ParentNode("pre", [ParentNode("code", nodes, None)], None)
 
     return p_node
 

@@ -107,7 +107,7 @@ for (int i = 0; i < 10; i++) {
 }```"""
         node = markdown_to_html(text)
         result = node.to_html()
-        expected = "<div><code>for (int i = 0; i < 10; i++) {\n    doSomething();\n}</code></div>"
+        expected = "<div><pre><code>for (int i = 0; i < 10; i++) {&#10;    doSomething();&#10;}</code></pre></div>"
         self.assertEqual(result, expected)
 
     def test_c2(self):
