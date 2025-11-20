@@ -109,8 +109,9 @@ def create_quote(text: str) -> HTMLNode:
     for substring in substrings:
         substring, _ = regex.subn(re_defs.REGEX_BLOCK_QUOTE, "", substring)
         if substring == "":  # Empty blockquote line spacer
-            nodes.append(create_paragraph("\n".join(stripped)))
-            stripped = []
+            if stripped != []:
+                nodes.append(create_paragraph("\n".join(stripped)))
+                stripped = []
         else:
             stripped.append(substring)
 
