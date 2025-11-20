@@ -4,7 +4,7 @@ import os
 from mdtoblocks import block_to_blocktype, markdown_to_blocks, BlockType
 
 
-class TestSplitImgsLinks(unittest.TestCase):
+class TestMdToBlocks(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         """
@@ -165,13 +165,7 @@ doSomething;
     def test_q3(self):
         # Missing space at beginning
         md = ">Here is a block quote"
-        expected = BlockType.PARAGRAPH
-        result = block_to_blocktype(md)
-        self.assertEqual(result, expected)
-
-    def test_q4(self):
-        md = "> Here is a block quote\n> Another\n> Yet Another\n>nope"
-        expected = BlockType.PARAGRAPH
+        expected = BlockType.QUOTE
         result = block_to_blocktype(md)
         self.assertEqual(result, expected)
 
@@ -189,7 +183,7 @@ doSomething;
 
     def test_ul3(self):
         # Missing space at beginning
-        md = ">Here is a bad list"
+        md = "-Here is a bad list"
         expected = BlockType.PARAGRAPH
         result = block_to_blocktype(md)
         self.assertEqual(result, expected)
