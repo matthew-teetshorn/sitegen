@@ -68,6 +68,17 @@ class TestMarkdownToHTML(unittest.TestCase):
         expected = '<div><p>text in front <a href="url1">link1</a><a href="url2">link2</a> text in back</p></div>'
         self.assertEqual(result, expected)
 
+    def test_p8(self):
+        text = """
+Here is a paragraph of text.
+That spans across
+multiple lines.
+"""
+        node = markdown_to_html(text)
+        result = node.to_html()
+        expected = "<div><p>Here is a paragraph of text.<br />That spans across<br />multiple lines.</p></div>"
+        self.assertEqual(result, expected)
+
     def test_h1(self):
         text = "# Here is a heading"
         node = markdown_to_html(text)
@@ -107,7 +118,7 @@ for (int i = 0; i < 10; i++) {
 }```"""
         node = markdown_to_html(text)
         result = node.to_html()
-        expected = "<div><pre><code>for (int i = 0; i < 10; i++) {&#10;    doSomething();&#10;}</code></pre></div>"
+        expected = "<div><pre><code>for (int i = 0; i < 10; i++) {<br />    doSomething();<br />}</code></pre></div>"
         self.assertEqual(result, expected)
 
     def test_c2(self):

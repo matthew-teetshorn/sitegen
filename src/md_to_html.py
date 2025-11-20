@@ -15,6 +15,11 @@ import re_defs
 # b/i/code/a/img
 
 
+def newlines_to_html(text: str) -> str:
+    new_text = text.replace("\n", "<br />")
+    return new_text
+
+
 def text_to_htmlnodes(text: str) -> List[HTMLNode]:
     textnodes = text_to_textnodes(text)
     leafnodes: List[HTMLNode] = []
@@ -58,6 +63,7 @@ def link_to_node_helper(node: TextNode) -> List[HTMLNode]:
 
 def create_paragraph(text: str) -> HTMLNode:
     nodes: List[HTMLNode] = []
+    text = newlines_to_html(text)
     nodes.extend(text_to_htmlnodes(text))
     p_node = ParentNode("p", nodes, None)
 
@@ -91,8 +97,8 @@ def create_code(text: str) -> HTMLNode:
         raise ValueError("No markdown code block found in create_code(text)")
 
     new_text = new_text.strip("\n")
-    # HTML doesn't render newlines, replace with HTML newline code
-    new_text = new_text.replace("\n", "&#10;")
+    # HTML doesn't render newlines, replace with HTML
+    new_text = newlines_to_html(new_text)
     # We don't process the code block as markdown, just append it as a LeafNode
     nodes.append(LeafNode(None, new_text, None))
     p_node = ParentNode("pre", [ParentNode("code", nodes, None)], None)
