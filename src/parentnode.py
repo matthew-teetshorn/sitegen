@@ -5,7 +5,7 @@ class ParentNode(HTMLNode):
     def __init__(
         self,
         tag: str | None,
-        children: list["HTMLNode"] | None,
+        children: list[HTMLNode] | None = None,
         props: dict[str, str] | None = None,
     ):
         # ParentNode is not allowed to have a value
