@@ -1,4 +1,3 @@
-from typing import List
 import unittest
 import os
 
@@ -16,7 +15,7 @@ class TestSplitNode(unittest.TestCase):
 
     def test_none(self):
         node = TextNode("This text has no delimiter", TextType.TEXT)
-        old_nodes: List[TextNode] = []
+        old_nodes: list[TextNode] = []
         old_nodes = [node]
         new_nodes = split_nodes_delimiter(old_nodes, "**", TextType.BOLD)
         self.assertEqual(old_nodes[0], new_nodes[0])
@@ -28,7 +27,7 @@ class TestSplitNode(unittest.TestCase):
 
     def test_bold(self):
         node = TextNode("This is **bold** text", TextType.TEXT)
-        old_nodes: List[TextNode] = []
+        old_nodes: list[TextNode] = []
         old_nodes = [node]
         new_nodes = split_nodes_delimiter(old_nodes, "**", TextType.BOLD)
         self.assertEqual(len(new_nodes), 3)
@@ -38,7 +37,7 @@ class TestSplitNode(unittest.TestCase):
 
     def test_italic(self):
         node = TextNode("This is _italic_ text", TextType.TEXT)
-        old_nodes: List[TextNode] = []
+        old_nodes: list[TextNode] = []
         old_nodes = [node]
         new_nodes = split_nodes_delimiter(old_nodes, "_", TextType.ITALIC)
         self.assertEqual(len(new_nodes), 3)
@@ -48,7 +47,7 @@ class TestSplitNode(unittest.TestCase):
 
     def test_code(self):
         node = TextNode("This is `code block` text", TextType.TEXT)
-        old_nodes: List[TextNode] = []
+        old_nodes: list[TextNode] = []
         old_nodes = [node]
         new_nodes = split_nodes_delimiter(old_nodes, "`", TextType.CODE)
         self.assertEqual(len(new_nodes), 3)
@@ -60,7 +59,7 @@ class TestSplitNode(unittest.TestCase):
         node1 = TextNode("This is **bold** text", TextType.TEXT)
         node2 = TextNode("**This** is bold text at beginning", TextType.TEXT)
         node3 = TextNode("This is bold text at **end**", TextType.TEXT)
-        old_nodes: List[TextNode] = []
+        old_nodes: list[TextNode] = []
         old_nodes = [node1, node2, node3]
         new_nodes = split_nodes_delimiter(old_nodes, "**", TextType.BOLD)
         self.assertEqual(len(new_nodes), 7)
@@ -76,7 +75,7 @@ class TestSplitNode(unittest.TestCase):
 
     def test_multi_bold(self):
         node = TextNode("**This** is multiple **bold** text **pieces**", TextType.TEXT)
-        old_nodes: List[TextNode] = []
+        old_nodes: list[TextNode] = []
         old_nodes = [node]
         new_nodes = split_nodes_delimiter(old_nodes, "**", TextType.BOLD)
         self.assertEqual(len(new_nodes), 5)
