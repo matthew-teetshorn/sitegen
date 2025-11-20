@@ -107,9 +107,12 @@ def create_quote(text: str) -> HTMLNode:
     substrings = text.split("\n")
     stripped = []
     for substring in substrings:
-        if substring[0:2] != "> ":
-            raise ValueError("Invalid block quote detected in create_quote(text)")
-        stripped.append(substring[2:])
+        substring, _ = regex.subn(re_defs.REGEX_BLOCK_QUOTE, "", substring)
+        if substring == "":  # Empty blockquote line spacer
+            nodes.append(create_paragraph("\n".join(stripped)))
+            stripped = []
+        else:
+            stripped.append(substring)
 
     nodes.append(create_paragraph("\n".join(stripped)))
     p_node.children = nodes
