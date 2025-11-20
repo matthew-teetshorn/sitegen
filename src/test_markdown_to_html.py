@@ -125,6 +125,36 @@ for (int i = 0; i < 10; i++) {
         text = "`` this isn't properly formatted ``"
         self.assertRaises(ValueError, create_code, text)
 
+    def test_q1(self):
+        text = """
+> Here is a block
+> quote with some
+> stuff in it.
+"""
+        node = markdown_to_html(text)
+        result = node.to_html()
+        expected = "<div><blockquote><p>Here is a block<br />quote with some<br />stuff in it.</p></blockquote></div>"
+        self.assertEqual(result, expected)
+
+    def test_q2(self):
+        text = """
+> Here is a **bold**
+> quote with _italic_
+> and `code` in it.
+"""
+        node = markdown_to_html(text)
+        result = node.to_html()
+        expected = "<div><blockquote><p>Here is a <b>bold</b><br />quote with <i>italic</i><br />and <code>code</code> in it.</p></blockquote></div>"
+        self.assertEqual(result, expected)
+
+    def test_q3(self):
+        text = """
+>Here is a **bold**
+>quote with _italic_
+>and `code` in it.
+"""
+        self.assertRaises(ValueError, create_quote, text)
+
 
 if __name__ == "__main__":
     unittest.main()

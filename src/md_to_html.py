@@ -106,10 +106,21 @@ def create_code(text: str) -> HTMLNode:
     return p_node
 
 
+# TODO: Consider adding functionality for nested blockquotes
 def create_quote(text: str) -> HTMLNode:
     nodes: List[HTMLNode] = []
-    p_node = ParentNode(None, None, None)
+    p_node = ParentNode("blockquote", None, None)
+    substrings = text.split("\n")
+    stripped = ""
+    for substring in substrings:
+        if substring[0:2] != "> ":
+            raise ValueError("Invalid block quote detected in create_quote(text)")
+        stripped += substring[2:] + "\n"
 
+    stripped = stripped.strip()
+    print(f"|{stripped}|")
+    nodes.append(create_paragraph(stripped))
+    p_node.children = nodes
     return p_node
 
 
