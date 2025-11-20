@@ -7,3 +7,4 @@ REGEX_OL_ITEM = r"^(\d+)\. "
 REGEX_LINK_FRONT = r"(?<!!)\[([^\[\]]+)\]\("
 REGEX_LINK_URL = r"\(((?:[^()]|(?R))*)\)"
 REGEX_MARKDOWN_IMG = r'!\[([^[\]]+)\]\(([^"()\s{}<>|\\`[\]]+)\)'
+REGEX_BREAK_ENDING = r"\s{2,}\n"
