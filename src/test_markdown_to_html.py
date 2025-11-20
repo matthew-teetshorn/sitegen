@@ -211,31 +211,6 @@ for (int i = 0; i < 10; i++) {
 """
         self.assertRaises(ValueError, create_ordered_list, text)
 
-    def test_4(self):
-        text = """
-### Heading
-
-Here is some **bold**
-and _italic_ and
-`code like` text
-
-> block quote
-> next line
-> nope back
-> back to lower
-> lower not working
-
-Here's a line with an ![image](https://picsum.photos/200/200) and a [link to the site](https://picsum.photos) where I got it
-
-```
-for (int i = 0; i < 10; i++) {
-doSomething();
-}
-```
-"""
-        processed = markdown_to_html(text)
-        print(processed.to_html())
-
     def test_paragraphs(self):
         md = """
 This is **bolded** paragraph
@@ -252,6 +227,24 @@ This is another paragraph with _italic_ text and `code` here
         self.assertEqual(
             html,
             "<div><p>This is <b>bolded</b> paragraph\ntext in a p\ntag here</p><p>This is another paragraph with <i>italic</i> text and <code>code</code> here</p></div>",
+        )
+
+    def test_paragraphs_newlines(self):
+        md = """
+This is **bolded** paragraph  
+text in a p  
+tag here  
+
+This is another paragraph with _italic_ text and `code` here
+
+"""
+
+        node = markdown_to_html(md)
+        html = node.to_html()
+
+        self.assertEqual(
+            html,
+            "<div><p>This is <b>bolded</b> paragraph<br />text in a p<br />tag here</p><p>This is another paragraph with <i>italic</i> text and <code>code</code> here</p></div>",
         )
 
 

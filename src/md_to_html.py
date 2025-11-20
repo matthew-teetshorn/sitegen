@@ -8,6 +8,7 @@ import regex
 import re_defs
 
 
+# Add line breaks wherever two or more space characters are followed by newline
 def newlines_to_html(text: str) -> str:
     new_text, _ = regex.subn(re_defs.REGEX_BREAK_ENDING, "<br />", text)
     return new_text
@@ -56,6 +57,7 @@ def link_to_node_helper(node: TextNode) -> list[HTMLNode]:
 
 def create_paragraph(text: str) -> HTMLNode:
     nodes: list[HTMLNode] = []
+    text = newlines_to_html(text)
     nodes.extend(text_to_htmlnodes(text))
     p_node = ParentNode("p", nodes, None)
 
@@ -99,8 +101,6 @@ def create_code(text: str) -> HTMLNode:
 
 
 # TODO: Consider adding functionality for nested blockquotes
-# TODO: Consider adding requirement for "  " (2 spaces) at end of newlines
-#       currently we are allowing "\n" to insert break and not joining lines
 def create_quote(text: str) -> HTMLNode:
     nodes: list[HTMLNode] = []
     p_node = ParentNode("blockquote", None, None)
