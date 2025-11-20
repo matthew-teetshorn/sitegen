@@ -133,7 +133,7 @@ for (int i = 0; i < 10; i++) {
 """
         node = markdown_to_html(text)
         result = node.to_html()
-        expected = "<div><blockquote><p>Here is a block<br />quote with some<br />stuff in it.</p></blockquote></div>"
+        expected = "<div><blockquote><p>Here is a block\nquote with some\nstuff in it.</p></blockquote></div>"
         self.assertEqual(result, expected)
 
     def test_q2(self):
@@ -144,7 +144,7 @@ for (int i = 0; i < 10; i++) {
 """
         node = markdown_to_html(text)
         result = node.to_html()
-        expected = "<div><blockquote><p>Here is a <b>bold</b><br />quote with <i>italic</i><br />and <code>code</code> in it.</p></blockquote></div>"
+        expected = "<div><blockquote><p>Here is a <b>bold</b>\nquote with <i>italic</i>\nand <code>code</code> in it.</p></blockquote></div>"
         self.assertEqual(result, expected)
 
     def test_q3(self):
@@ -210,6 +210,31 @@ for (int i = 0; i < 10; i++) {
 2. and `code` in it.
 """
         self.assertRaises(ValueError, create_ordered_list, text)
+
+    def test_4(self):
+        text = """
+### Heading
+
+Here is some **bold**
+and _italic_ and
+`code like` text
+
+> block quote
+> next line
+> nope back
+> back to lower
+> lower not working
+
+Here's a line with an ![image](https://picsum.photos/200/200) and a [link to the site](https://picsum.photos) where I got it
+
+```
+for (int i = 0; i < 10; i++) {
+doSomething();
+}
+```
+"""
+        processed = markdown_to_html(text)
+        print(processed.to_html())
 
     def test_paragraphs(self):
         md = """

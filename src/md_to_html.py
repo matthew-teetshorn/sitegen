@@ -9,7 +9,7 @@ import re_defs
 
 
 def newlines_to_html(text: str) -> str:
-    new_text = text.replace("\n", "<br />")
+    new_text, _ = regex.subn(re_defs.REGEX_BREAK_ENDING, "<br />", text)
     return new_text
 
 
@@ -105,14 +105,13 @@ def create_quote(text: str) -> HTMLNode:
     nodes: list[HTMLNode] = []
     p_node = ParentNode("blockquote", None, None)
     substrings = text.split("\n")
-    stripped = ""
+    stripped = []
     for substring in substrings:
         if substring[0:2] != "> ":
             raise ValueError("Invalid block quote detected in create_quote(text)")
-        stripped += substring[2:] + "<br />"
+        stripped.append(substring[2:])
 
-    stripped = stripped[0:-6]
-    nodes.append(create_paragraph(stripped))
+    nodes.append(create_paragraph("\n".join(stripped)))
     p_node.children = nodes
     return p_node
 
