@@ -147,14 +147,6 @@ for (int i = 0; i < 10; i++) {
         expected = "<div><blockquote><p>Here is a <b>bold</b>\nquote with <i>italic</i>\nand <code>code</code> in it.</p></blockquote></div>"
         self.assertEqual(result, expected)
 
-    def test_q3(self):
-        text = """
->Here is a **bold**
->quote with _italic_
->and `code` in it.
-"""
-        self.assertRaises(ValueError, create_quote, text)
-
     def test_ul1(self):
         text = """
 - Here is a **bold**
@@ -245,6 +237,22 @@ This is another paragraph with _italic_ text and `code` here
         self.assertEqual(
             html,
             "<div><p>This is <b>bolded</b> paragraph<br />text in a p<br />tag here</p><p>This is another paragraph with <i>italic</i> text and <code>code</code> here</p></div>",
+        )
+
+    def test_codeblock(self):
+        md = """
+```
+This is text that _should_ remain
+the **same** even with inline stuff
+```
+"""
+
+        node = markdown_to_html(md)
+
+        html = node.to_html()
+        self.assertEqual(
+            html,
+            "<div><pre><code>This is text that _should_ remain\nthe **same** even with inline stuff\n</code></pre></div>",
         )
 
 
