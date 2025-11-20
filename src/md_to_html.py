@@ -56,8 +56,6 @@ def link_to_node_helper(node: TextNode) -> list[HTMLNode]:
 
 def create_paragraph(text: str) -> HTMLNode:
     nodes: list[HTMLNode] = []
-    # text = newlines_to_html(text)
-    text = text.replace("\n", " ")
     nodes.extend(text_to_htmlnodes(text))
     p_node = ParentNode("p", nodes, None)
 
