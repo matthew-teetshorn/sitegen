@@ -1,4 +1,3 @@
-from typing import List
 from htmlnode import HTMLNode
 from parentnode import ParentNode
 from leafnode import LeafNode
@@ -20,9 +19,9 @@ def newlines_to_html(text: str) -> str:
     return new_text
 
 
-def text_to_htmlnodes(text: str) -> List[HTMLNode]:
+def text_to_htmlnodes(text: str) -> list[HTMLNode]:
     textnodes = text_to_textnodes(text)
-    leafnodes: List[HTMLNode] = []
+    leafnodes: list[HTMLNode] = []
     # bold italic code img link
     for node in textnodes:
         match node.type:
@@ -46,7 +45,7 @@ def text_to_htmlnodes(text: str) -> List[HTMLNode]:
     return leafnodes
 
 
-def link_to_node_helper(node: TextNode) -> List[HTMLNode]:
+def link_to_node_helper(node: TextNode) -> list[HTMLNode]:
     ret_nodes = []
 
     if node.url is None:
@@ -62,7 +61,7 @@ def link_to_node_helper(node: TextNode) -> List[HTMLNode]:
 
 
 def create_paragraph(text: str) -> HTMLNode:
-    nodes: List[HTMLNode] = []
+    nodes: list[HTMLNode] = []
     text = newlines_to_html(text)
     nodes.extend(text_to_htmlnodes(text))
     p_node = ParentNode("p", nodes, None)
@@ -82,7 +81,7 @@ def create_heading(text: str) -> HTMLNode:
 
     # Get difference and subtract white space character
     heading_length = len(text) - len(new_text) - 1
-    nodes: List[HTMLNode] = []
+    nodes: list[HTMLNode] = []
     nodes.extend(text_to_htmlnodes(new_text))
     p_node = ParentNode(f"h{heading_length}", nodes, None)
 
@@ -90,7 +89,7 @@ def create_heading(text: str) -> HTMLNode:
 
 
 def create_code(text: str) -> HTMLNode:
-    nodes: List[HTMLNode] = []
+    nodes: list[HTMLNode] = []
     new_text = regex.sub(re_defs.REGEX_CODE_BLOCK, r"\1", text, regex.DOTALL)
 
     if len(new_text) == len(text):
@@ -108,7 +107,7 @@ def create_code(text: str) -> HTMLNode:
 
 # TODO: Consider adding functionality for nested blockquotes
 def create_quote(text: str) -> HTMLNode:
-    nodes: List[HTMLNode] = []
+    nodes: list[HTMLNode] = []
     p_node = ParentNode("blockquote", None, None)
     substrings = text.split("\n")
     stripped = ""
@@ -118,21 +117,20 @@ def create_quote(text: str) -> HTMLNode:
         stripped += substring[2:] + "\n"
 
     stripped = stripped.strip()
-    print(f"|{stripped}|")
     nodes.append(create_paragraph(stripped))
     p_node.children = nodes
     return p_node
 
 
 def create_unordered_list(text: str) -> HTMLNode:
-    nodes: List[HTMLNode] = []
+    nodes: list[HTMLNode] = []
     p_node = ParentNode(None, None, None)
 
     return p_node
 
 
 def create_ordered_list(text: str) -> HTMLNode:
-    nodes: List[HTMLNode] = []
+    nodes: list[HTMLNode] = []
     p_node = ParentNode(None, None, None)
 
     return p_node
