@@ -7,12 +7,6 @@ from text_to_textnodes import text_to_textnodes
 import regex
 import re_defs
 
-# Parent Node Types:
-# div/p/h1-h6/ul/ol/li/blockquote/pre
-
-# Leaf Node Types
-# b/i/code/a/img
-
 
 def newlines_to_html(text: str) -> str:
     new_text = text.replace("\n", "<br />")
@@ -62,7 +56,8 @@ def link_to_node_helper(node: TextNode) -> list[HTMLNode]:
 
 def create_paragraph(text: str) -> HTMLNode:
     nodes: list[HTMLNode] = []
-    text = newlines_to_html(text)
+    # text = newlines_to_html(text)
+    text = text.replace("\n", " ")
     nodes.extend(text_to_htmlnodes(text))
     p_node = ParentNode("p", nodes, None)
 
@@ -106,6 +101,8 @@ def create_code(text: str) -> HTMLNode:
 
 
 # TODO: Consider adding functionality for nested blockquotes
+# TODO: Consider adding requirement for "  " (2 spaces) at end of newlines
+#       currently we are allowing "\n" to insert break and not joining lines
 def create_quote(text: str) -> HTMLNode:
     nodes: list[HTMLNode] = []
     p_node = ParentNode("blockquote", None, None)
@@ -114,9 +111,9 @@ def create_quote(text: str) -> HTMLNode:
     for substring in substrings:
         if substring[0:2] != "> ":
             raise ValueError("Invalid block quote detected in create_quote(text)")
-        stripped += substring[2:] + "\n"
+        stripped += substring[2:] + "<br />"
 
-    stripped = stripped.strip()
+    stripped = stripped[0:-6]
     nodes.append(create_paragraph(stripped))
     p_node.children = nodes
     return p_node
@@ -124,14 +121,36 @@ def create_quote(text: str) -> HTMLNode:
 
 def create_unordered_list(text: str) -> HTMLNode:
     nodes: list[HTMLNode] = []
-    p_node = ParentNode(None, None, None)
+    substrings = text.split("\n")
+    stripped = ""
+    for substring in substrings:
+        if substring[0:2] != "- ":
+            raise ValueError(
+                "Invalid unordered list detected in create_unordered_list(text)"
+            )
+        stripped = substring[2:].strip()
+        processed = text_to_htmlnodes(stripped)
+        nodes.append(ParentNode("li", processed, None))
+    p_node = ParentNode("ul", nodes, None)
 
     return p_node
 
 
 def create_ordered_list(text: str) -> HTMLNode:
     nodes: list[HTMLNode] = []
-    p_node = ParentNode(None, None, None)
+    substrings = text.split("\n")
+    stripped = ""
+    index = 1
+    for substring in substrings:
+        stripped = regex.sub(re_defs.REGEX_OL_ITEM, "", substring)
+        if len(substring) == len(stripped):
+            raise ValueError(
+                "Invalid ordered list detected in create_unordered_list(text)"
+            )
+        processed = text_to_htmlnodes(stripped)
+        nodes.append(ParentNode("li", processed, None))
+        index += 1
+    p_node = ParentNode("ol", nodes, None)
 
     return p_node
 

@@ -76,7 +76,7 @@ multiple lines.
 """
         node = markdown_to_html(text)
         result = node.to_html()
-        expected = "<div><p>Here is a paragraph of text.<br />That spans across<br />multiple lines.</p></div>"
+        expected = "<div><p>Here is a paragraph of text. That spans across multiple lines.</p></div>"
         self.assertEqual(result, expected)
 
     def test_h1(self):
@@ -154,6 +154,105 @@ for (int i = 0; i < 10; i++) {
 >and `code` in it.
 """
         self.assertRaises(ValueError, create_quote, text)
+
+    def test_ul1(self):
+        text = """
+- Here is a **bold**
+- quote with _italic_
+- and `code` in it.
+"""
+        node = markdown_to_html(text)
+        result = node.to_html()
+        expected = "<div><ul><li>Here is a <b>bold</b></li><li>quote with <i>italic</i></li><li>and <code>code</code> in it.</li></ul></div>"
+        self.assertEqual(result, expected)
+
+    def test_ul2(self):
+        text = """
+-Here is a **bold**
+-quote with _italic_
+-and `code` in it.
+"""
+        self.assertRaises(ValueError, create_unordered_list, text)
+
+    def test_ol1(self):
+        text = """
+1. Here is a **bold**
+2. quote with _italic_
+3. and `code` in it.
+"""
+        node = markdown_to_html(text)
+        result = node.to_html()
+        expected = "<div><ol><li>Here is a <b>bold</b></li><li>quote with <i>italic</i></li><li>and <code>code</code> in it.</li></ol></div>"
+        self.assertEqual(result, expected)
+
+    def test_ol2(self):
+        text = """
+1. a
+2. b
+3. c
+4. d
+5. e
+6. f
+7. g
+8. h
+9. i
+10. j
+"""
+        node = markdown_to_html(text)
+        result = node.to_html()
+        expected = "<div><ol><li>a</li><li>b</li><li>c</li><li>d</li><li>e</li><li>f</li><li>g</li><li>h</li><li>i</li><li>j</li></ol></div>"
+        self.assertEqual(result, expected)
+
+    def test_ol3(self):
+        text = """
+1. Here is a **bold**
+2. quote with _italic_
+2. and `code` in it.
+"""
+        self.assertRaises(ValueError, create_ordered_list, text)
+
+    def test_4(self):
+        text = """
+### Heading
+
+Here is some **bold**
+and _italic_ and
+`code like` text
+
+> block quote
+> next line
+> nope back
+> back to lower
+> lower not working
+
+Here's a line with an ![image](https://picsum.photos/200/200) and a [link to the site](https://picsum.photos) where I got it
+
+```
+for (int i = 0; i < 10; i++) {
+doSomething();
+}
+```
+"""
+        processed = markdown_to_html(text)
+        print(processed.to_html())
+
+    def test_paragraphs(self):
+        md = """
+This is **bolded** paragraph
+text in a p
+tag here
+
+This is another paragraph with _italic_ text and `code` here
+
+"""
+
+        node = markdown_to_html(md)
+        html = node.to_html()
+
+        self.assertEqual(
+            html,
+            "<div><p>This is <b>bolded</b> paragraph text in a p tag here</p><p>This is another paragraph with <i>italic</i> text and <code>code</code> here</p></div>",
+        )
 
 
 if __name__ == "__main__":
