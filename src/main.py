@@ -1,3 +1,4 @@
+import sys
 import os
 from directory_copy import directory_copy
 from extract_title import extract_title
@@ -103,7 +104,9 @@ def generate_page(from_path: str, template_path: str, dest_path: str):
     return
 
 
-def main():
+def main(argv=sys.argv):
+    if len(sys.argv) > 1:
+        print(argv[1])
     directory_copy(SRC_STATIC_DIR, DEST_PUBLIC_DIR)
     # generate_page(SRC_CONTENT_DIR, SRC_PROJ_ROOT_DIR, DEST_PUBLIC_DIR)
     generate_pages_recursive(SRC_CONTENT_DIR, SRC_PROJ_ROOT_DIR, DEST_PUBLIC_DIR)
