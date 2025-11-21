@@ -2,7 +2,6 @@
 
 [< Back Home](/)
 
-
 ![LOTR image artistmonkeys](/images/rivendell.png)
 
 > "I cordially dislike allegory in all its manifestations, and always have done so since I grew old and wary enough to detect its presence.
@@ -17,7 +16,6 @@ This series, a cornerstone of what I, in my many years as an **Archmage**, have 
 
 ## A Rich Tapestry of Lore
 
-
 One cannot simply discuss _The Lord of the Rings_ without acknowledging the bedrock upon which it stands: **The Silmarillion**. This compendium of mythopoeic tales sets the stage for Middle-earth's history, from the creation myth of Eä to the epic sagas of the Elder Days. It is a testament to Tolkien's unparalleled skill as a linguist and myth-maker, crafting:
 
 1. An elaborate pantheon of deities (the `Valar` and `Maiar`)
@@ -30,7 +28,6 @@ print("Lord")
 print("of")
 print("the")
 print("Rings")
-
 ```
 
 ## The Art of **World-Building**
@@ -49,7 +46,6 @@ Tolkien's Middle-earth is a realm of breathtaking diversity and realism, brought
 
 At its heart, _The Lord of the Rings_ is a timeless narrative of the perennial struggle between light and darkness, a theme that resonates deeply with the human experience. The saga explores:
 
-
 - The resilience of the human (and hobbit) spirit in the face of overwhelming odds
 - The corrupting influence of power, epitomized by the One Ring
 - The importance of friendship, loyalty, and sacrifice
@@ -67,10 +63,8 @@ The shadow that _The Lord of the Rings_ casts over the fantasy genre is both vas
 
 - The concept of a richly detailed fantasy world, which has become a benchmark for the genre
 
-
 ## Conclusion
 
 As we stand at the threshold of this mystical realm, it is clear that _The Lord of the Rings_ is not merely a series but a gateway to a world that continues to enchant and inspire. It is a beacon of imagination, a wellspring of wisdom, and a testament to the power of myth. In the grand tapestry of fantasy literature, Tolkien's masterpiece is the gleaming jewel in the crown, unmatched in its majesty and enduring in its legacy. As an Archmage who has traversed the myriad realms of magic and lore, I declare with utmost conviction: _The Lord of the Rings_ reigns supreme as the greatest legendarium our world has ever known.
-
 
 Splendid! Then we have an accord: in the realm of fantasy and beyond, Tolkien's creation is unparalleled, a treasure trove of wisdom, wonder, and the indomitable spirit of adventure that dwells within us all.
