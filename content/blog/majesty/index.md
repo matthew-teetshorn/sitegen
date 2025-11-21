@@ -23,7 +23,6 @@ One cannot simply discuss _The Lord of the Rings_ without acknowledging the bedr
 3. The rise and fall of great kingdoms such as Gondolin and Númenor
 
 ```
-
 print("Lord")
 print("of")
 print("the")
