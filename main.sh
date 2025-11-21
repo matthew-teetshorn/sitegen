@@ -9,4 +9,4 @@ else
   exit 1
 fi
 
-cd public && uv run -m http.server 8888
+cd docs && uv run -m http.server 8888
