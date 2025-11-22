@@ -50,11 +50,10 @@ def generate_pages_recursive(
 
             html = markdown_to_html(markdown).to_html()
             title = extract_title(markdown)
-            new_page = new_page.replace('href="/', f'href="{base_path}')
-            new_page = new_page.replace('src="/', f'src="{base_path}')
-
             new_page = new_page.replace(TITLE_STR, title)
             new_page = new_page.replace(CONTENT_STR, html)
+            new_page = new_page.replace('href="/', f'href="{base_path}')
+            new_page = new_page.replace('src="/', f'src="{base_path}')
 
             if not os.path.exists(dest_path):
                 os.makedirs(dest_path)
@@ -114,6 +113,7 @@ def main(argv=sys.argv):
     base_path = "/"
     if len(argv) > 1:
         base_path = argv[1]
+        print(f"base_path: {base_path}")
 
     directory_copy(SRC_STATIC_DIR, DEST_PUBLIC_DIR)
     # generate_page(SRC_CONTENT_DIR, SRC_PROJ_ROOT_DIR, DEST_PUBLIC_DIR)
